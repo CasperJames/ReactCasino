@@ -22,14 +22,14 @@ class Game extends React.Component {
     const cards = [2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
     const suits = ['Diamonds','Clubs','Hearts','Spades'];
     const deck = [];
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 8; i++) {
       for (let j = 0; j < cards.length; j++) {
         for (let k = 0; k < suits.length; k++) {
           deck.push({number: cards[j], suit: suits[k]});
         }
       }
     }
-    //Make sure we have 8 decks :)
+    // Make sure we have 8 decks
     console.table(deck);
     return deck;
   }
@@ -46,11 +46,12 @@ class Game extends React.Component {
       cards: playerStartingHand,
       count: this.getCount(playerStartingHand)
     };
+
     const dealer = {
       cards: dealerStartingHand,
       count: this.getCount(dealerStartingHand)
     };
-    
+    // Send back updated deck, player hand, dealer hand
     return {updatedDeck: playerCard2.updatedDeck, player, dealer};
   }
 
@@ -59,8 +60,8 @@ class Game extends React.Component {
     if (type === 'continue') {
       // Khajiit has wares, if you have coin
       if (this.state.wallet > 0) {
-	// Recreate decks if you've played enough to only have 10 left in deck
-        const deck = (this.state.deck.length < 10) ? this.generateDecks() : this.state.deck;
+	// Recreate decks if you've played enough to only have 2 decks left
+        const deck = (this.state.deck.length <= 104) ? this.generateDecks() : this.state.deck;
         const { updatedDeck, player, dealer } = this.dealCards(deck);
 
         this.setState({
@@ -80,6 +81,7 @@ class Game extends React.Component {
       const deck = this.generateDecks();
       const { updatedDeck, player, dealer } = this.dealCards(deck);
 
+      // Update game properties    
       this.setState({
         deck: updatedDeck,
         dealer,
@@ -93,7 +95,7 @@ class Game extends React.Component {
     }
   }
   
-  // Pull random card for deal - send back deck without drawn card
+  // Pull random card for deal - send back random card and deck without drawn card
   getRandomCard(deck) {
     const updatedDeck = deck;
     const randomIndex = Math.floor(Math.random() * updatedDeck.length);
@@ -102,13 +104,14 @@ class Game extends React.Component {
     return { randomCard, updatedDeck };
   }
   
-  // Place bet on hand - should be placed before cards dealt
+  // Place bet on hand - TODO: make this mandatory before cards dealt.
   placeBet() {
     const currentBet = this.state.inputValue;
 
     if (currentBet > this.state.wallet) {
-      this.setState({ message: 'There\'s not enough in your wallet to make that bet.' });
+      this.setState({ message: 'You cannot bet more than the dollar amount in your wallet.' });
     } else if (currentBet % 1 !== 0) {
+      // TODO: support decimal amounts
       this.setState({ message: 'You can only bet whole $ amounts' });
     } else {
       // Deduct current bet from wallet
@@ -162,6 +165,7 @@ class Game extends React.Component {
       if (card.number === 'J' || card.number === 'Q' || card.number === 'K') {
         return total + 10;
       } else if (card.number === 'A') {
+	// Ace by default becomes 1 if player busts with 11
         return (total + 11 <= 21) ? total + 11 : total + 1;
       } else {
         return total + card.number;
@@ -180,7 +184,7 @@ class Game extends React.Component {
       dealer.cards.push(randomCard.randomCard);
       dealer.count = this.getCount(dealer.cards);
 
-      // Keep drawing cards until count is 17 or more
+      // Dealer must keep drawing cards until count is 17 or more
       while(dealer.count < 17) {
         const draw = this.dealerDraw(dealer, deck);
         dealer = draw.dealer;
@@ -244,8 +248,6 @@ class Game extends React.Component {
   // Make enter commit bet
   handleKeyDown(e) {
     const enter = 13;
-    console.log(e.keyCode);
-    
     if (e.keyCode === enter) {
       this.placeBet();
     }
@@ -263,15 +265,19 @@ class Game extends React.Component {
     let dealerCount;
     const card1 = this.state.dealer.cards[0].number;
     const card2 = this.state.dealer.cards[1].number;
+
+    // Does dealer have more than 1 card?
     if (card2) {
       dealerCount = this.state.dealer.count;
     } else {
+      // Handle face cards in count
       if (card1 === 'J' || card1 === 'Q' || card1 === 'K') {
         dealerCount = 10;
       } else if (card1 === 'A') {
 	//TODO: Give option for player to select 1 or 11
         dealerCount = 11;
       } else {
+	// Number card added to dealer count
         dealerCount = card1;
       }
     }
@@ -279,18 +285,18 @@ class Game extends React.Component {
     // Return info to player for game - get input from player
     return (
       <div>
+	<br />
         <div className="buttons">
           <button onClick={() => {this.startNewGame()}}>Reset</button>
           <button onClick={() => {this.hit()}}>Hit</button>
           <button onClick={() => {this.stand()}}>Stand</button>
-        </div>
-        <br /> 
+        </div>         
         <p class="gameP">Wallet: ${ this.state.wallet }</p>
         {
           !this.state.currentBet ? 
           <div className="input-bet">            
             <form>
-              <input type="text" name="bet" placeholder="" class="game-form" value={this.state.inputValue} onChange={this.inputChange.bind(this)}/>
+              <input type="text" name="bet" placeholder="Place your bet" class="game-form" value={this.state.inputValue} onChange={this.inputChange.bind(this)}/>
             </form>
             <button onClick={() => {this.placeBet()}}>Place Bet</button>
           </div>
@@ -326,7 +332,6 @@ class Game extends React.Component {
     );
   }
 };
-
   
   const Card = ({ number, suit }) => {
     var retString = "storage/Images/Cards/";
@@ -340,4 +345,5 @@ class Game extends React.Component {
     );
   };
 
+// Send output to screen in div
 ReactDOM.render(<Game />, document.getElementById('divGame'));

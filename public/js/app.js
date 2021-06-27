@@ -1930,7 +1930,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
       var suits = ['Diamonds', 'Clubs', 'Hearts', 'Spades'];
       var deck = [];
 
-      for (var i = 0; i < 9; i++) {
+      for (var i = 0; i < 8; i++) {
         for (var j = 0; j < cards.length; j++) {
           for (var k = 0; k < suits.length; k++) {
             deck.push({
@@ -1939,7 +1939,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
             });
           }
         }
-      } //Make sure we have 8 decks :)
+      } // Make sure we have 8 decks
 
 
       console.table(deck);
@@ -1961,7 +1961,8 @@ var Game = /*#__PURE__*/function (_React$Component) {
       var dealer = {
         cards: dealerStartingHand,
         count: this.getCount(dealerStartingHand)
-      };
+      }; // Send back updated deck, player hand, dealer hand
+
       return {
         updatedDeck: playerCard2.updatedDeck,
         player: player,
@@ -1975,8 +1976,8 @@ var Game = /*#__PURE__*/function (_React$Component) {
       if (type === 'continue') {
         // Khajiit has wares, if you have coin
         if (this.state.wallet > 0) {
-          // Recreate decks if you've played enough to only have 10 left in deck
-          var deck = this.state.deck.length < 10 ? this.generateDecks() : this.state.deck;
+          // Recreate decks if you've played enough to only have 2 decks left
+          var deck = this.state.deck.length <= 104 ? this.generateDecks() : this.state.deck;
 
           var _this$dealCards = this.dealCards(deck),
               updatedDeck = _this$dealCards.updatedDeck,
@@ -2004,7 +2005,8 @@ var Game = /*#__PURE__*/function (_React$Component) {
         var _this$dealCards2 = this.dealCards(_deck),
             _updatedDeck = _this$dealCards2.updatedDeck,
             _player = _this$dealCards2.player,
-            _dealer = _this$dealCards2.dealer;
+            _dealer = _this$dealCards2.dealer; // Update game properties    
+
 
         this.setState({
           deck: _updatedDeck,
@@ -2017,7 +2019,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
           message: null
         });
       }
-    } // Pull random card for deal - send back deck without drawn card
+    } // Pull random card for deal - send back random card and deck without drawn card
 
   }, {
     key: "getRandomCard",
@@ -2030,7 +2032,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
         randomCard: randomCard,
         updatedDeck: updatedDeck
       };
-    } // Place bet on hand - should be placed before cards dealt
+    } // Place bet on hand - TODO: make this mandatory before cards dealt.
 
   }, {
     key: "placeBet",
@@ -2039,9 +2041,10 @@ var Game = /*#__PURE__*/function (_React$Component) {
 
       if (currentBet > this.state.wallet) {
         this.setState({
-          message: 'There\'s not enough in your wallet to make that bet.'
+          message: 'You cannot bet more than the dollar amount in your wallet.'
         });
       } else if (currentBet % 1 !== 0) {
+        // TODO: support decimal amounts
         this.setState({
           message: 'You can only bet whole $ amounts'
         });
@@ -2123,6 +2126,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
         if (card.number === 'J' || card.number === 'Q' || card.number === 'K') {
           return total + 10;
         } else if (card.number === 'A') {
+          // Ace by default becomes 1 if player busts with 11
           return total + 11 <= 21 ? total + 11 : total + 1;
         } else {
           return total + card.number;
@@ -2140,7 +2144,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
         var dealer = this.state.dealer;
         dealer.cards.pop();
         dealer.cards.push(randomCard.randomCard);
-        dealer.count = this.getCount(dealer.cards); // Keep drawing cards until count is 17 or more
+        dealer.count = this.getCount(dealer.cards); // Dealer must keep drawing cards until count is 17 or more
 
         while (dealer.count < 17) {
           var draw = this.dealerDraw(dealer, deck);
@@ -2212,7 +2216,6 @@ var Game = /*#__PURE__*/function (_React$Component) {
     key: "handleKeyDown",
     value: function handleKeyDown(e) {
       var enter = 13;
-      console.log(e.keyCode);
 
       if (e.keyCode === enter) {
         this.placeBet();
@@ -2234,24 +2237,26 @@ var Game = /*#__PURE__*/function (_React$Component) {
 
       var dealerCount;
       var card1 = this.state.dealer.cards[0].number;
-      var card2 = this.state.dealer.cards[1].number;
+      var card2 = this.state.dealer.cards[1].number; // Does dealer have more than 1 card?
 
       if (card2) {
         dealerCount = this.state.dealer.count;
       } else {
+        // Handle face cards in count
         if (card1 === 'J' || card1 === 'Q' || card1 === 'K') {
           dealerCount = 10;
         } else if (card1 === 'A') {
           //TODO: Give option for player to select 1 or 11
           dealerCount = 11;
         } else {
+          // Number card added to dealer count
           dealerCount = card1;
         }
       } // Return info to player for game - get input from player
 
 
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "buttons",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             onClick: function onClick() {
@@ -2269,7 +2274,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
             },
             children: "Stand"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
           "class": "gameP",
           children: ["Wallet: $", this.state.wallet]
         }), !this.state.currentBet ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -2278,7 +2283,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
               type: "text",
               name: "bet",
-              placeholder: "",
+              placeholder: "Place your bet",
               "class": "game-form",
               value: this.state.inputValue,
               onChange: this.inputChange.bind(this)
@@ -2348,7 +2353,8 @@ var Card = function Card(_ref) {
       src: retString
     })
   });
-};
+}; // Send output to screen in div
+
 
 react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Game, {}), document.getElementById('divGame'));
 
