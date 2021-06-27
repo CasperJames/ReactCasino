@@ -17,7 +17,13 @@ class Game extends React.Component {
     };
   }
 
-  // Generate the decks - utilizing 8 decks for 3:2 game rather than 6:5
+  // Shuffle the cards - 20 times should do. 
+  shuffleCards(deck) {
+    deck = deck.sort(function(){ return Math.random() - 0.5});
+    return deck;
+  }
+
+  // Generate the decks - utilizing 8 decks
   generateDecks() {
     const cards = [2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
     const suits = ['Diamonds','Clubs','Hearts','Spades'];
@@ -30,10 +36,13 @@ class Game extends React.Component {
       }
     }
     // Make sure we have 8 decks
-    console.table(deck);
+    //console.table(deck);
+    for(let l = 0; l < 4; l++) {
+    	this.shuffleCards(deck);
+    }
     return deck;
   }
-  
+ 
   // Deal first 2 cards
   dealCards(deck) {
     const playerCard1 = this.getRandomCard(deck);
@@ -74,7 +83,7 @@ class Game extends React.Component {
         });
       } else {
 	// Khajiit has no wares for you - broke and need to reset.
-        this.setState({ message: 'Your wallet is empty :( - please start a new game.' });
+        this.setState({ message: 'Your wallet is empty :( - please reset the game.' });
       }
     } else {
       // New game starts here
@@ -98,9 +107,12 @@ class Game extends React.Component {
   // Pull random card for deal - send back random card and deck without drawn card
   getRandomCard(deck) {
     const updatedDeck = deck;
-    const randomIndex = Math.floor(Math.random() * updatedDeck.length);
+    //const topCard = deck[0];
+    //console.table(topCard);
+    const randomIndex = 0;
     const randomCard = updatedDeck[randomIndex];
     updatedDeck.splice(randomIndex, 1);
+    //console.table(updatedDeck);
     return { randomCard, updatedDeck };
   }
   
@@ -152,6 +164,7 @@ class Game extends React.Component {
  
   // Counting cards - tsk tsk
   getCount(cards) {
+    //console.table(cards);
     const rearranged = [];
     cards.forEach(card => {
       if (card.number === 'A') {

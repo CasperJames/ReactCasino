@@ -1920,10 +1920,19 @@ var Game = /*#__PURE__*/function (_React$Component) {
       message: null
     };
     return _this;
-  } // Generate the decks - utilizing 8 decks for 3:2 game rather than 6:5
+  } // Shuffle the cards - 20 times should do. 
 
 
   _createClass(Game, [{
+    key: "shuffleCards",
+    value: function shuffleCards(deck) {
+      deck = deck.sort(function () {
+        return Math.random() - 0.5;
+      });
+      return deck;
+    } // Generate the decks - utilizing 8 decks
+
+  }, {
     key: "generateDecks",
     value: function generateDecks() {
       var cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'];
@@ -1940,9 +1949,13 @@ var Game = /*#__PURE__*/function (_React$Component) {
           }
         }
       } // Make sure we have 8 decks
+      //console.table(deck);
 
 
-      console.table(deck);
+      for (var l = 0; l < 4; l++) {
+        this.shuffleCards(deck);
+      }
+
       return deck;
     } // Deal first 2 cards
 
@@ -1995,7 +2008,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
         } else {
           // Khajiit has no wares for you - broke and need to reset.
           this.setState({
-            message: 'Your wallet is empty :( - please start a new game.'
+            message: 'Your wallet is empty :( - please reset the game.'
           });
         }
       } else {
@@ -2024,10 +2037,13 @@ var Game = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "getRandomCard",
     value: function getRandomCard(deck) {
-      var updatedDeck = deck;
-      var randomIndex = Math.floor(Math.random() * updatedDeck.length);
+      var updatedDeck = deck; //const topCard = deck[0];
+      //console.table(topCard);
+
+      var randomIndex = 0;
       var randomCard = updatedDeck[randomIndex];
-      updatedDeck.splice(randomIndex, 1);
+      updatedDeck.splice(randomIndex, 1); //console.table(updatedDeck);
+
       return {
         randomCard: randomCard,
         updatedDeck: updatedDeck
@@ -2114,6 +2130,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "getCount",
     value: function getCount(cards) {
+      //console.table(cards);
       var rearranged = [];
       cards.forEach(function (card) {
         if (card.number === 'A') {
