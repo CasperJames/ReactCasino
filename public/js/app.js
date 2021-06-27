@@ -1973,7 +1973,9 @@ var Game = /*#__PURE__*/function (_React$Component) {
     key: "startNewGame",
     value: function startNewGame(type) {
       if (type === 'continue') {
+        // Khajiit has wares, if you have coin
         if (this.state.wallet > 0) {
+          // Recreate decks if you've played enough to only have 10 left in deck
           var deck = this.state.deck.length < 10 ? this.generateDecks() : this.state.deck;
 
           var _this$dealCards = this.dealCards(deck),
@@ -1990,11 +1992,13 @@ var Game = /*#__PURE__*/function (_React$Component) {
             message: null
           });
         } else {
+          // Khajiit has no wares for you - broke and need to reset.
           this.setState({
             message: 'Your wallet is empty :( - please start a new game.'
           });
         }
       } else {
+        // New game starts here
         var _deck = this.generateDecks();
 
         var _this$dealCards2 = this.dealCards(_deck),
@@ -2238,6 +2242,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
         if (card1 === 'J' || card1 === 'Q' || card1 === 'K') {
           dealerCount = 10;
         } else if (card1 === 'A') {
+          //TODO: Give option for player to select 1 or 11
           dealerCount = 11;
         } else {
           dealerCount = card1;
@@ -2274,6 +2279,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
               type: "text",
               name: "bet",
               placeholder: "",
+              "class": "game-form",
               value: this.state.inputValue,
               onChange: this.inputChange.bind(this)
             })
@@ -2333,8 +2339,9 @@ var Game = /*#__PURE__*/function (_React$Component) {
 var Card = function Card(_ref) {
   var number = _ref.number,
       suit = _ref.suit;
-  var retString = "storage/Images/Cards/";
-  var combo = number ? retString = retString + suit + "/" + number + ".png" : retString = retString + "Back.png";
+  var retString = "storage/Images/Cards/"; // If number exists show cards, else show card back
+
+  number ? retString = retString + suit + "/" + number + ".png" : retString = retString + "Back.png";
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
       "class": "playing-card",

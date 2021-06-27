@@ -57,7 +57,9 @@ class Game extends React.Component {
   // Start new game - are we continuing with wallet or resetting?
   startNewGame(type) {
     if (type === 'continue') {
+      // Khajiit has wares, if you have coin
       if (this.state.wallet > 0) {
+	// Recreate decks if you've played enough to only have 10 left in deck
         const deck = (this.state.deck.length < 10) ? this.generateDecks() : this.state.deck;
         const { updatedDeck, player, dealer } = this.dealCards(deck);
 
@@ -70,9 +72,11 @@ class Game extends React.Component {
           message: null
         });
       } else {
+	// Khajiit has no wares for you - broke and need to reset.
         this.setState({ message: 'Your wallet is empty :( - please start a new game.' });
       }
     } else {
+      // New game starts here
       const deck = this.generateDecks();
       const { updatedDeck, player, dealer } = this.dealCards(deck);
 
@@ -265,6 +269,7 @@ class Game extends React.Component {
       if (card1 === 'J' || card1 === 'Q' || card1 === 'K') {
         dealerCount = 10;
       } else if (card1 === 'A') {
+	//TODO: Give option for player to select 1 or 11
         dealerCount = 11;
       } else {
         dealerCount = card1;
@@ -285,7 +290,7 @@ class Game extends React.Component {
           !this.state.currentBet ? 
           <div className="input-bet">            
             <form>
-              <input type="text" name="bet" placeholder="" value={this.state.inputValue} onChange={this.inputChange.bind(this)}/>
+              <input type="text" name="bet" placeholder="" class="game-form" value={this.state.inputValue} onChange={this.inputChange.bind(this)}/>
             </form>
             <button onClick={() => {this.placeBet()}}>Place Bet</button>
           </div>
@@ -322,9 +327,11 @@ class Game extends React.Component {
   }
 };
 
+  
   const Card = ({ number, suit }) => {
     var retString = "storage/Images/Cards/";
-    const combo = (number) ? retString = retString + suit + "/" + number + ".png" : retString = retString + "Back.png";
+    // If number exists show cards, else show card back
+    (number) ? retString = retString + suit + "/" + number + ".png" : retString = retString + "Back.png";
 
     return(
 	<td>
