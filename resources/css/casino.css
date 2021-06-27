@@ -1,0 +1,117 @@
+.navbar-laravel {
+	box-shadow: 0 2px 4px rgba(0,0,0,.04);
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.navbar-brand , .nav-link, .my-form, .login-form {
+	font-family: 'Dancing Script', cursive !important;
+	color: white !important;
+	font-size: 30px;
+}
+
+.my-form {
+	padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+}
+
+.my-form .row, .login-form .row {
+        margin-left: 0;
+        margin-right: 0;
+}
+    
+.login-form {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+}
+
+.card-header {
+	background-color: rgba(0, 0, 0, 0.5);	
+}
+
+.card {
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+body {
+	margin: 0;
+        background: url("/storage/Images/General/Background.jpg") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        font-family: 'Dancing Script', cursive !important;
+	color: white;
+}
+
+h1 {
+        font-size: 60px !important;
+}
+
+img {
+        max-width: 100%;
+        height: auto;
+}
+
+#splash-div {
+        background: url("/storage/Images/General/Splash.png") no-repeat center center fixed;
+        -webkit-background-size: contain;
+        -moz-background-size: contain;
+        -o-background-size: contain;
+        background-size: contain;
+}
+
+.btn-primary, button {
+	letter-spacing: 3px;
+	padding-bottom: 100px !important;
+        -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+        -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+        box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+}
+
+.btn-primary {
+	border-radius: 20px;
+        border: 3px solid white;
+	background-color: black;
+}
+
+.btn-primary:hover {
+	background-color: white;
+	border: 3px solid black;
+	color: black;
+}
+
+button {
+        width: 80%;
+        height: 100px;
+        font-size: 60px !important;
+        border-radius: 20px;
+        border: 3px solid black;
+}
+
+
+p {
+  text-align: center;
+}
+
+.card, .card-red {
+  height: 150px;
+  width: 100px;
+  background-color: #BFBFBF;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-red {
+  color: red;
+}
+
+.cards {
+  margin: 0 auto;
+}
+
+.input-bet {
+  display: flex;
+  justify-content: center;
+}
