@@ -9,11 +9,15 @@ class Game extends React.Component {
       deck: [],
       dealer: null,
       player: null,
-      wallet: 0,
+      wallet: playerWalletPass,
       inputValue: '',
       currentBet: null,
       gameOver: false,
-      message: null
+      message: null,
+      playerWallet: playerWalletPass,
+      playerHands: playerHandsPass,
+      playerWins: playerWinsPass,
+      playerLosses: playerLossesPass
     };
   }
 
@@ -89,17 +93,19 @@ class Game extends React.Component {
       // New game starts here
       const deck = this.generateDecks();
       const { updatedDeck, player, dealer } = this.dealCards(deck);
-
+      let playerWallet = this.state.playerWallet;
       // Update game properties    
       this.setState({
         deck: updatedDeck,
         dealer,
         player,
-        wallet: 1000,
+        wallet: playerWallet,
         inputValue: '',
         currentBet: null,
         gameOver: false,
         message: null
+      }, function() {
+	console.log(this.state.playerWallet);
       });
     }
   }
@@ -124,7 +130,8 @@ class Game extends React.Component {
     } else {
       // Deduct current bet from wallet
       const wallet = this.state.wallet - currentBet;
-      this.setState({ wallet, inputValue: '', currentBet });
+      const playerWallet = this.state.playerWallet - currentBet;
+      this.setState({ wallet, playerWallet, inputValue: '', currentBet });
     }
   }
   
@@ -206,20 +213,34 @@ class Game extends React.Component {
           dealer,
           wallet: this.state.wallet + this.state.currentBet * 2,
           gameOver: true,
-          message: 'Dealer bust! You win!'
+          message: 'Dealer bust! You win!',
+	  playerHands: this.state.playerHands + 1,
+	  playerWins: this.state.playerWins +1,
+	  playerWallet: this.state.wallet
         });
       } else {
         const winner = this.getWinner(dealer, this.state.player);
         let wallet = this.state.wallet;
         let message;
+	let playerHands = this.state.playerHands;
+	let playerWins = this.state.playerWins;
+	let playerWallet = this.state.playerWallet;
+	let playerLosses = this.state.playerLosses;
         
         if (winner === 'dealer') {
           message = 'Dealer wins!';
+	  playerHands += this.state.playerHands;
+	  playerLosses += this.state.Losses;
         } else if (winner === 'player') {
           wallet += this.state.currentBet * 2;
+	  playerHands += this.state.playerHands;
+	  playerWins += this.state.playerWins;
+	  playerWallet != this.state.currentBet * 2;
           message = 'You win!';
         } else {
           wallet += this.state.currentBet;
+	  playerWallet += this.state.currentBet;
+	  playerHands += this.state.playerHands;
           message = 'Push with ' + this.dealer.count + '!';
         }
         
@@ -228,9 +249,15 @@ class Game extends React.Component {
           deck, 
           dealer,
           wallet,
+	  playerWallet,
+	  playerHands,
+	  playerWins,
+	  playerLosses,
           gameOver: true,
           message
-        });
+        }, function() {
+		console.log(this.state.playerWallet + " Wallet Player!");
+	});
       } 
     } else {
       this.setState({ message: 'Game over! Please start a new game.' });

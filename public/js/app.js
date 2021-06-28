@@ -1914,11 +1914,15 @@ var Game = /*#__PURE__*/function (_React$Component) {
       deck: [],
       dealer: null,
       player: null,
-      wallet: 0,
+      wallet: playerWalletPass,
       inputValue: '',
       currentBet: null,
       gameOver: false,
-      message: null
+      message: null,
+      playerWallet: playerWalletPass,
+      playerHands: playerHandsPass,
+      playerWins: playerWinsPass,
+      playerLosses: playerLossesPass
     };
     return _this;
   } // Shuffle the cards
@@ -2018,18 +2022,21 @@ var Game = /*#__PURE__*/function (_React$Component) {
         var _this$dealCards2 = this.dealCards(_deck),
             _updatedDeck = _this$dealCards2.updatedDeck,
             _player = _this$dealCards2.player,
-            _dealer = _this$dealCards2.dealer; // Update game properties    
+            _dealer = _this$dealCards2.dealer;
 
+        var playerWallet = this.state.playerWallet; // Update game properties    
 
         this.setState({
           deck: _updatedDeck,
           dealer: _dealer,
           player: _player,
-          wallet: 1000,
+          wallet: playerWallet,
           inputValue: '',
           currentBet: null,
           gameOver: false,
           message: null
+        }, function () {
+          console.log(this.state.playerWallet);
         });
       }
     } // Pull random card for deal - send back random card and deck without drawn card
@@ -2064,8 +2071,10 @@ var Game = /*#__PURE__*/function (_React$Component) {
       } else {
         // Deduct current bet from wallet
         var wallet = this.state.wallet - currentBet;
+        var playerWallet = this.state.playerWallet - currentBet;
         this.setState({
           wallet: wallet,
+          playerWallet: playerWallet,
           inputValue: '',
           currentBet: currentBet
         });
@@ -2172,20 +2181,34 @@ var Game = /*#__PURE__*/function (_React$Component) {
             dealer: dealer,
             wallet: this.state.wallet + this.state.currentBet * 2,
             gameOver: true,
-            message: 'Dealer bust! You win!'
+            message: 'Dealer bust! You win!',
+            playerHands: this.state.playerHands + 1,
+            playerWins: this.state.playerWins + 1,
+            playerWallet: this.state.wallet
           });
         } else {
           var winner = this.getWinner(dealer, this.state.player);
           var wallet = this.state.wallet;
           var message;
+          var playerHands = this.state.playerHands;
+          var playerWins = this.state.playerWins;
+          var playerWallet = this.state.playerWallet;
+          var playerLosses = this.state.playerLosses;
 
           if (winner === 'dealer') {
             message = 'Dealer wins!';
+            playerHands += this.state.playerHands;
+            playerLosses += this.state.Losses;
           } else if (winner === 'player') {
             wallet += this.state.currentBet * 2;
+            playerHands += this.state.playerHands;
+            playerWins += this.state.playerWins;
+            playerWallet != this.state.currentBet * 2;
             message = 'You win!';
           } else {
             wallet += this.state.currentBet;
+            playerWallet += this.state.currentBet;
+            playerHands += this.state.playerHands;
             message = 'Push with ' + this.dealer.count + '!';
           } // Reset states after game
 
@@ -2194,8 +2217,14 @@ var Game = /*#__PURE__*/function (_React$Component) {
             deck: deck,
             dealer: dealer,
             wallet: wallet,
+            playerWallet: playerWallet,
+            playerHands: playerHands,
+            playerWins: playerWins,
+            playerLosses: playerLosses,
             gameOver: true,
             message: message
+          }, function () {
+            console.log(this.state.playerWallet + " Wallet Player!");
           });
         }
       } else {

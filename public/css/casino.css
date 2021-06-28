@@ -115,14 +115,3 @@ table.cards, table.chips {
     margin: 10px 0px 10px 0px; 
 }
 
-input[type=text] {
-    cursor: pointer;
-    border-radius:5px;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    background-color: black;
-    color: white;
-    margin-bottom: 10px;
-}
-
-

@@ -7,5 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
 {
-    use HasFactory;
+	use HasFactory;
+
+    protected $fillable = [
+        'userId',
+        'wallet',
+	'handsPlayed',
+	'wins',
+	'losses',
+    ];
+
 }
