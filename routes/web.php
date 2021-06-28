@@ -2,6 +2,7 @@
   
 use Illuminate\Support\Facades\Route;  
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\UpdateData;
 
 // Auth routes
 Route::get('login', [AuthController::class, 'index'])->name('login');
@@ -18,3 +19,4 @@ Route::get('/', function () {
 Route::get('/about', function () { 
     return view('/about');
 });
+Route::post('/updatedata', 'App\Http\Controllers\UpdateData@updateAllTheThings');

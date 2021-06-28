@@ -1922,7 +1922,8 @@ var Game = /*#__PURE__*/function (_React$Component) {
       playerWallet: playerWalletPass,
       playerHands: playerHandsPass,
       playerWins: playerWinsPass,
-      playerLosses: playerLossesPass
+      playerLosses: playerLossesPass,
+      userId: userIdPass
     };
     return _this;
   } // Shuffle the cards
@@ -2182,8 +2183,8 @@ var Game = /*#__PURE__*/function (_React$Component) {
             wallet: this.state.wallet + this.state.currentBet * 2,
             gameOver: true,
             message: 'Dealer bust! You win!',
-            playerHands: this.state.playerHands + 1,
-            playerWins: this.state.playerWins + 1,
+            playerHands: Number(this.state.playerHands) + 1,
+            playerWins: Number(this.state.playerWins) + 1,
             playerWallet: this.state.wallet
           });
         } else {
@@ -2197,18 +2198,18 @@ var Game = /*#__PURE__*/function (_React$Component) {
 
           if (winner === 'dealer') {
             message = 'Dealer wins!';
-            playerHands += this.state.playerHands;
-            playerLosses += this.state.Losses;
+            playerHands = Number(this.state.playerHands) + 1;
+            playerLosses = Number(this.state.Losses) + 1;
           } else if (winner === 'player') {
             wallet += this.state.currentBet * 2;
-            playerHands += this.state.playerHands;
-            playerWins += this.state.playerWins;
+            playerHands = Number(this.state.playerHands) + 1;
+            playerWins = Number(this.state.playerWins) + 1;
             playerWallet != this.state.currentBet * 2;
             message = 'You win!';
           } else {
             wallet += this.state.currentBet;
             playerWallet += this.state.currentBet;
-            playerHands += this.state.playerHands;
+            playerHands = Number(this.state.playerHands) + 1;
             message = 'Push with ' + this.dealer.count + '!';
           } // Reset states after game
 
@@ -2227,6 +2228,18 @@ var Game = /*#__PURE__*/function (_React$Component) {
             console.log(this.state.playerWallet + " Wallet Player!");
           });
         }
+
+        axios({
+          method: 'post',
+          url: '/updatedata',
+          data: {
+            playerWalletData: this.state.playerWallet,
+            playerHandsData: this.state.playerHands,
+            playerWinsData: this.state.playerWins,
+            playerLossesData: this.state.playerLosses,
+            userIdData: userIdPass
+          }
+        });
       } else {
         this.setState({
           message: 'Game over! Please start a new game.'

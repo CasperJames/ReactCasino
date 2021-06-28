@@ -64,6 +64,7 @@ class AuthController extends Controller
 	$handsPlayed = Player::where('userId', $data)->value('handsPlayed');
 	$wins = Player::where('userId', $data)->value('wins');
 	$losses = Player::where('userId', $data)->value('losses');
+	Session::put('userIdData',$data);
 	Session::put('playerWallet', $wallet);
 	Session::put('playerHands', $handsPlayed);
 	Session::put('playerWins', $wins);

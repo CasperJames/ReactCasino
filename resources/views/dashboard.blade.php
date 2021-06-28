@@ -18,6 +18,7 @@
 				let playerHandsPass = '{{ session()->get('playerHands') }}';
 				let playerWinsPass = '{{ session()->get('playerWins') }}';
 				let playerLossesPass = '{{ session()->get('playerLosses') }}';
+				let userIdPass = '{{ session()->get('userIdData') }}';
 			    </script>
 			</div>
 		</div>
