@@ -17,7 +17,7 @@ class Game extends React.Component {
     };
   }
 
-  // Shuffle the cards - 20 times should do. 
+  // Shuffle the cards
   shuffleCards(deck) {
     deck = deck.sort(function(){ return Math.random() - 0.5});
     return deck;
@@ -35,8 +35,8 @@ class Game extends React.Component {
         }
       }
     }
-    // Make sure we have 8 decks
-    //console.table(deck);
+    
+    // Now that we have our decks, shuffle them
     for(let l = 0; l < 4; l++) {
     	this.shuffleCards(deck);
     }
@@ -107,19 +107,15 @@ class Game extends React.Component {
   // Pull random card for deal - send back random card and deck without drawn card
   getRandomCard(deck) {
     const updatedDeck = deck;
-    //const topCard = deck[0];
-    //console.table(topCard);
     const randomIndex = 0;
     const randomCard = updatedDeck[randomIndex];
     updatedDeck.splice(randomIndex, 1);
-    //console.table(updatedDeck);
     return { randomCard, updatedDeck };
   }
   
   // Place bet on hand - TODO: make this mandatory before cards dealt.
-  placeBet() {
-    const currentBet = this.state.inputValue;
-
+  placeBet(betVal) {
+    const currentBet = betVal;
     if (currentBet > this.state.wallet) {
       this.setState({ message: 'You cannot bet more than the dollar amount in your wallet.' });
     } else if (currentBet % 1 !== 0) {
@@ -164,7 +160,6 @@ class Game extends React.Component {
  
   // Counting cards - tsk tsk
   getCount(cards) {
-    //console.table(cards);
     const rearranged = [];
     cards.forEach(card => {
       if (card.number === 'A') {
@@ -253,29 +248,15 @@ class Game extends React.Component {
     }
   }
   
-  inputChange(e) {
-    const inputValue = +e.target.value;
-    this.setState({inputValue});
-  }
-  
-  // Make enter commit bet
-  handleKeyDown(e) {
-    const enter = 13;
-    if (e.keyCode === enter) {
-      this.placeBet();
-    }
-  }
-  
   // hook pre-render	
   componentWillMount() {
     this.startNewGame();
     const body = document.querySelector('body');
-    body.addEventListener('keydown', this.handleKeyDown.bind(this));
   }
 
   chipClick(chipCount) {
-  	console.log(chipCount + " count");
-	this.placeBet(chipCount);
+    console.log(chipCount + " count");
+    this.placeBet(chipCount);
   }
   
   // On render - we make game magic here
@@ -305,65 +286,57 @@ class Game extends React.Component {
         <p class="gameP">Wallet: ${ this.state.wallet }</p>
         {
           !this.state.currentBet ?
-	<>
-        <div className="chips">
-		<table class="chips">
-			<tr>
-				<td>
-					<img class="chip-img" src="storage/Images/Chips/20.png" onClick={() => this.chipClick(20)} />
-				</td>
-				<td>
-					<img class="chip-img" src="storage/Images/Chips/50.png" onClick={() => this.chipClick(50)} />
-				</td>
-				<td>
-					<img class="chip-img" src="storage/Images/Chips/100.png" onClick={() => this.chipClick(100)} />
-				</td>
-			</tr>
-		</table>
-	</div>
-	<br />	
-	  <div className="input-bet">            
-            <form>
-              <input type="text" name="bet" placeholder="Place your bet" class="game-form" value={this.state.inputValue} onChange={this.inputChange.bind(this)}/>
-            </form>
-            <button onClick={() => {this.placeBet()}}>Place Bet</button>
-          </div>
-	</>
-          : null
-        }
-	<br />
-	<div className="buttons">
-          <button onClick={() => {this.startNewGame()}}>Reset</button>
-          <button onClick={() => {this.hit()}}>Hit</button>
-          <button onClick={() => {this.stand()}}>Stand</button>
+          <div className="chips">
+            <table class="chips">
+	      <tr>
+		<td>
+		  <img class="chip-img" src="storage/Images/Chips/20.png" data-value="20" onClick={() => this.placeBet(20)} />
+		</td>
+		<td>
+		  <img class="chip-img" src="storage/Images/Chips/50.png" data-value="50" onClick={() => this.placeBet(50)} />
+		</td>
+		<td>
+		  <img class="chip-img" src="storage/Images/Chips/100.png" data-value="100" onClick={() => this.placeBet(100)} />
+		</td>
+	      </tr>
+	    </table>
+	  </div>
+            : null
+          }
+	  <br />
+	  <>
+	    <div className="buttons">
+              <button onClick={() => {this.startNewGame()}}>Reset</button>
+              <button onClick={() => {this.hit()}}>Hit</button>
+              <button onClick={() => {this.stand()}}>Stand</button>
+            </div>
+	  </>
+            {
+              this.state.gameOver ?
+                <div className="buttons">
+                  <button onClick={() => {this.startNewGame('continue')}}>Continue</button>
+                </div>
+              : null
+            }
+          <p class="gameP">Your Hand ({ this.state.player.count })</p>
+          <table className="cards">
+            <tr>
+              { this.state.player.cards.map((card, i) => {
+                return <Card key={i} number={card.number} suit={card.suit}/>
+              }) }
+            </tr>
+          </table>
+        
+          <p class="gameP">Dealer's Hand ({ this.state.dealer.count })</p>
+          <table className="cards">
+            <tr>
+              { this.state.dealer.cards.map((card, i) => {
+                return <Card key={i} number={card.number} suit={card.suit}/>;
+              }) }
+            </tr>
+          </table>
+          <p class="gameP">{ this.state.message }</p>
         </div>
-        {
-          this.state.gameOver ?
-          <div className="buttons">
-            <button onClick={() => {this.startNewGame('continue')}}>Continue</button>
-          </div>
-          : null
-        }
-        <p class="gameP">Your Hand ({ this.state.player.count })</p>
-        <table className="cards">
-          <tr>
-            { this.state.player.cards.map((card, i) => {
-              return <Card key={i} number={card.number} suit={card.suit}/>
-            }) }
-          </tr>
-        </table>
-        
-        <p class="gameP">Dealer's Hand ({ this.state.dealer.count })</p>
-        <table className="cards">
-          <tr>
-            { this.state.dealer.cards.map((card, i) => {
-              return <Card key={i} number={card.number} suit={card.suit}/>;
-            }) }
-          </tr>
-        </table>
-        
-        <p class="gameP">{ this.state.message }</p>
-      </div>
     );
   }
 };

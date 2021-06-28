@@ -1921,7 +1921,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
       message: null
     };
     return _this;
-  } // Shuffle the cards - 20 times should do. 
+  } // Shuffle the cards
 
 
   _createClass(Game, [{
@@ -1949,8 +1949,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
             });
           }
         }
-      } // Make sure we have 8 decks
-      //console.table(deck);
+      } // Now that we have our decks, shuffle them
 
 
       for (var l = 0; l < 4; l++) {
@@ -2038,13 +2037,10 @@ var Game = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "getRandomCard",
     value: function getRandomCard(deck) {
-      var updatedDeck = deck; //const topCard = deck[0];
-      //console.table(topCard);
-
+      var updatedDeck = deck;
       var randomIndex = 0;
       var randomCard = updatedDeck[randomIndex];
-      updatedDeck.splice(randomIndex, 1); //console.table(updatedDeck);
-
+      updatedDeck.splice(randomIndex, 1);
       return {
         randomCard: randomCard,
         updatedDeck: updatedDeck
@@ -2053,8 +2049,8 @@ var Game = /*#__PURE__*/function (_React$Component) {
 
   }, {
     key: "placeBet",
-    value: function placeBet() {
-      var currentBet = this.state.inputValue;
+    value: function placeBet(betVal) {
+      var currentBet = betVal;
 
       if (currentBet > this.state.wallet) {
         this.setState({
@@ -2131,7 +2127,6 @@ var Game = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "getCount",
     value: function getCount(cards) {
-      //console.table(cards);
       var rearranged = [];
       cards.forEach(function (card) {
         if (card.number === 'A') {
@@ -2220,24 +2215,6 @@ var Game = /*#__PURE__*/function (_React$Component) {
       } else {
         return 'push';
       }
-    }
-  }, {
-    key: "inputChange",
-    value: function inputChange(e) {
-      var inputValue = +e.target.value;
-      this.setState({
-        inputValue: inputValue
-      });
-    } // Make enter commit bet
-
-  }, {
-    key: "handleKeyDown",
-    value: function handleKeyDown(e) {
-      var enter = 13;
-
-      if (e.keyCode === enter) {
-        this.placeBet();
-      }
     } // hook pre-render	
 
   }, {
@@ -2245,7 +2222,6 @@ var Game = /*#__PURE__*/function (_React$Component) {
     value: function componentWillMount() {
       this.startNewGame();
       var body = document.querySelector('body');
-      body.addEventListener('keydown', this.handleKeyDown.bind(this));
     }
   }, {
     key: "chipClick",
@@ -2282,75 +2258,61 @@ var Game = /*#__PURE__*/function (_React$Component) {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
           "class": "gameP",
           children: ["Wallet: $", this.state.wallet]
-        }), !this.state.currentBet ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            className: "chips",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("table", {
-              "class": "chips",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
-                    "class": "chip-img",
-                    src: "storage/Images/Chips/20.png",
-                    onClick: function onClick() {
-                      return _this2.chipClick(20);
-                    }
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
-                    "class": "chip-img",
-                    src: "storage/Images/Chips/50.png",
-                    onClick: function onClick() {
-                      return _this2.chipClick(50);
-                    }
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
-                    "class": "chip-img",
-                    src: "storage/Images/Chips/100.png",
-                    onClick: function onClick() {
-                      return _this2.chipClick(100);
-                    }
-                  })
-                })]
-              })
+        }), !this.state.currentBet ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: "chips",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("table", {
+            "class": "chips",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+                  "class": "chip-img",
+                  src: "storage/Images/Chips/20.png",
+                  "data-value": "20",
+                  onClick: function onClick() {
+                    return _this2.placeBet(20);
+                  }
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+                  "class": "chip-img",
+                  src: "storage/Images/Chips/50.png",
+                  "data-value": "50",
+                  onClick: function onClick() {
+                    return _this2.placeBet(50);
+                  }
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+                  "class": "chip-img",
+                  src: "storage/Images/Chips/100.png",
+                  "data-value": "100",
+                  onClick: function onClick() {
+                    return _this2.placeBet(100);
+                  }
+                })
+              })]
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            className: "input-bet",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("form", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
-                type: "text",
-                name: "bet",
-                placeholder: "Place your bet",
-                "class": "game-form",
-                value: this.state.inputValue,
-                onChange: this.inputChange.bind(this)
-              })
+          })
+        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "buttons",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+              onClick: function onClick() {
+                _this2.startNewGame();
+              },
+              children: "Reset"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
               onClick: function onClick() {
-                _this2.placeBet();
+                _this2.hit();
               },
-              children: "Place Bet"
+              children: "Hit"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+              onClick: function onClick() {
+                _this2.stand();
+              },
+              children: "Stand"
             })]
-          })]
-        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-          className: "buttons",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            onClick: function onClick() {
-              _this2.startNewGame();
-            },
-            children: "Reset"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            onClick: function onClick() {
-              _this2.hit();
-            },
-            children: "Hit"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            onClick: function onClick() {
-              _this2.stand();
-            },
-            children: "Stand"
-          })]
+          })
         }), this.state.gameOver ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "buttons",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
