@@ -95,7 +95,7 @@ class Game extends React.Component {
         deck: updatedDeck,
         dealer,
         player,
-        wallet: 100,
+        wallet: 1000,
         inputValue: '',
         currentBet: null,
         gameOver: false,
@@ -272,6 +272,11 @@ class Game extends React.Component {
     const body = document.querySelector('body');
     body.addEventListener('keydown', this.handleKeyDown.bind(this));
   }
+
+  chipClick(chipCount) {
+  	console.log(chipCount + " count");
+	this.placeBet(chipCount);
+  }
   
   // On render - we make game magic here
   render() {
@@ -287,7 +292,6 @@ class Game extends React.Component {
       if (card1 === 'J' || card1 === 'Q' || card1 === 'K') {
         dealerCount = 10;
       } else if (card1 === 'A') {
-	//TODO: Give option for player to select 1 or 11
         dealerCount = 11;
       } else {
 	// Number card added to dealer count
@@ -298,23 +302,41 @@ class Game extends React.Component {
     // Return info to player for game - get input from player
     return (
       <div>
-	<br />
-        <div className="buttons">
-          <button onClick={() => {this.startNewGame()}}>Reset</button>
-          <button onClick={() => {this.hit()}}>Hit</button>
-          <button onClick={() => {this.stand()}}>Stand</button>
-        </div>         
         <p class="gameP">Wallet: ${ this.state.wallet }</p>
         {
-          !this.state.currentBet ? 
-          <div className="input-bet">            
+          !this.state.currentBet ?
+	<>
+        <div className="chips">
+		<table class="chips">
+			<tr>
+				<td>
+					<img class="chip-img" src="storage/Images/Chips/20.png" onClick={() => this.chipClick(20)} />
+				</td>
+				<td>
+					<img class="chip-img" src="storage/Images/Chips/50.png" onClick={() => this.chipClick(50)} />
+				</td>
+				<td>
+					<img class="chip-img" src="storage/Images/Chips/100.png" onClick={() => this.chipClick(100)} />
+				</td>
+			</tr>
+		</table>
+	</div>
+	<br />	
+	  <div className="input-bet">            
             <form>
               <input type="text" name="bet" placeholder="Place your bet" class="game-form" value={this.state.inputValue} onChange={this.inputChange.bind(this)}/>
             </form>
             <button onClick={() => {this.placeBet()}}>Place Bet</button>
           </div>
+	</>
           : null
         }
+	<br />
+	<div className="buttons">
+          <button onClick={() => {this.startNewGame()}}>Reset</button>
+          <button onClick={() => {this.hit()}}>Hit</button>
+          <button onClick={() => {this.stand()}}>Stand</button>
+        </div>
         {
           this.state.gameOver ?
           <div className="buttons">

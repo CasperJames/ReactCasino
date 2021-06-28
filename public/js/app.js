@@ -1897,6 +1897,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var Game = /*#__PURE__*/function (_React$Component) {
   _inherits(Game, _React$Component);
 
@@ -2025,7 +2026,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
           deck: _updatedDeck,
           dealer: _dealer,
           player: _player,
-          wallet: 100,
+          wallet: 1000,
           inputValue: '',
           currentBet: null,
           gameOver: false,
@@ -2245,6 +2246,12 @@ var Game = /*#__PURE__*/function (_React$Component) {
       this.startNewGame();
       var body = document.querySelector('body');
       body.addEventListener('keydown', this.handleKeyDown.bind(this));
+    }
+  }, {
+    key: "chipClick",
+    value: function chipClick(chipCount) {
+      console.log(chipCount + " count");
+      this.placeBet(chipCount);
     } // On render - we make game magic here
 
   }, {
@@ -2263,7 +2270,6 @@ var Game = /*#__PURE__*/function (_React$Component) {
         if (card1 === 'J' || card1 === 'Q' || card1 === 'K') {
           dealerCount = 10;
         } else if (card1 === 'A') {
-          //TODO: Give option for player to select 1 or 11
           dealerCount = 11;
         } else {
           // Number card added to dealer count
@@ -2273,7 +2279,61 @@ var Game = /*#__PURE__*/function (_React$Component) {
 
 
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
+          "class": "gameP",
+          children: ["Wallet: $", this.state.wallet]
+        }), !this.state.currentBet ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "chips",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("table", {
+              "class": "chips",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+                    "class": "chip-img",
+                    src: "storage/Images/Chips/20.png",
+                    onClick: function onClick() {
+                      return _this2.chipClick(20);
+                    }
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+                    "class": "chip-img",
+                    src: "storage/Images/Chips/50.png",
+                    onClick: function onClick() {
+                      return _this2.chipClick(50);
+                    }
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+                    "class": "chip-img",
+                    src: "storage/Images/Chips/100.png",
+                    onClick: function onClick() {
+                      return _this2.chipClick(100);
+                    }
+                  })
+                })]
+              })
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "input-bet",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("form", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                type: "text",
+                name: "bet",
+                placeholder: "Place your bet",
+                "class": "game-form",
+                value: this.state.inputValue,
+                onChange: this.inputChange.bind(this)
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+              onClick: function onClick() {
+                _this2.placeBet();
+              },
+              children: "Place Bet"
+            })]
+          })]
+        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "buttons",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             onClick: function onClick() {
@@ -2291,27 +2351,7 @@ var Game = /*#__PURE__*/function (_React$Component) {
             },
             children: "Stand"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
-          "class": "gameP",
-          children: ["Wallet: $", this.state.wallet]
-        }), !this.state.currentBet ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-          className: "input-bet",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("form", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
-              type: "text",
-              name: "bet",
-              placeholder: "Place your bet",
-              "class": "game-form",
-              value: this.state.inputValue,
-              onChange: this.inputChange.bind(this)
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            onClick: function onClick() {
-              _this2.placeBet();
-            },
-            children: "Place Bet"
-          })]
-        }) : null, this.state.gameOver ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        }), this.state.gameOver ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "buttons",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             onClick: function onClick() {

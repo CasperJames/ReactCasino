@@ -96,11 +96,16 @@ p, .buttons, .input-bet, .cards {
 }
 
 .playing-card {
-    max-height: 200px;
+    max-height: 175px;
     width: auto;
 }
 
-table.cards {
+.chip-img {
+    max-height: 50px;
+    height: auto;
+}
+
+table.cards, table.chips {
     margin-left: auto;
     margin-right: auto;
 }
@@ -119,3 +124,5 @@ input[type=text] {
     color: white;
     margin-bottom: 10px;
 }
+
+
